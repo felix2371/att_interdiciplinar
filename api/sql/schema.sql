@@ -4,6 +4,7 @@ USE sistema_lv;
 
 DROP TABLE IF EXISTS Sessoes;
 DROP TABLE IF EXISTS Usuarios;
+DROP TABLE IF EXISTS token;
 
 -- Criação da tabela de usuários
 CREATE TABLE Usuarios (
@@ -29,3 +30,16 @@ CREATE TABLE Sessoes (
 ALTER TABLE Sessoes ADD CONSTRAINT FK_Sessoes_Usuarios
     FOREIGN KEY (usuario)
     REFERENCES Usuarios (id) ON DELETE CASCADE; 
+
+-- Tabela usada pelo model `Token.js` (nome: `token`)
+CREATE TABLE token (
+  usuario BIGINT unsigned NOT NULL,
+  chave_token VARCHAR(255) NOT NULL,
+  validade DATETIME DEFAULT NULL,
+  PRIMARY KEY (usuario),
+  UNIQUE KEY (chave_token)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+ALTER TABLE token ADD CONSTRAINT FK_Token_Usuarios
+  FOREIGN KEY (usuario)
+  REFERENCES Usuarios (id) ON DELETE CASCADE;
